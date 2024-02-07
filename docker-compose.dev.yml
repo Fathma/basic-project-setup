@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    main_app: 
+        image: nest-app
+        env_file:
+            - ./.env.dev
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile-dev
+        # command: /start-main
+        ports:
+            - "3001:3001"
+        networks:
+            - nest_net
+        volumes:
+            - .:/app
+            - /app/node_modules
+        restart: unless-stopped
+networks:
+    nest_net:
