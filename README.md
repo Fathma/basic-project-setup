@@ -6,6 +6,7 @@ Todo:
 5. Configure pre commits 
 6. Make ansible playbook for provisioning the server
 7. Write ci/cd 
+8. API documentation 
 
 
 ```bash
