@@ -3,7 +3,7 @@ Todo:
 2. Run with docker
 3. Add database (docker) 
 4. Write tests
-5. configure pre commits 
+5. Configure pre commits 
 6. Make ansible playbook for provisioning the server
 7. Write ci/cd 
 
