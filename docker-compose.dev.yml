@@ -1,21 +1,62 @@
 version: '3'
 
 services:
-    main_app: 
+    mysql:
+        container_name: mysql
+        image: mysql:8
+        cap_add:
+            - SYS_NICE
+        env_file:
+            - ./.env.dev
+        ports:
+            - "${DATABASE_PORT}:${DATABASE_PORT}"
+        volumes:
+            - db_data:/var/lib/mysql
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password --skip-log-bin=1 --disable-log-bin=1
+        networks:
+            - nest_net
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            MYSQL_ROOT_USER: ${DATABASE_USERNAME}
+            MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+        logging:
+            driver: none
+    phpmyadmin:
+        container_name: phpmyadmin
+        image: phpmyadmin/phpmyadmin:5.2.1
+        env_file:
+            - ./.env.dev
+        depends_on:
+            - mysql
+        ports:
+            - "${PHPMYADMIN_PORT}:${WEBSERVER_PORT}"
+        networks:
+            - nest_net
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+            PMA_HOST: ${DATABASE_HOST}
+        logging:
+            driver: none
+    app: 
         image: nest-app
         env_file:
             - ./.env.dev
         build:
             context: .
             dockerfile: ./docker/Dockerfile-dev
-        # command: /start-main
         ports:
-            - "3001:3001"
+            - "${APPLICATION_PORT}:${APPLICATION_PORT}"
         networks:
             - nest_net
+        depends_on:
+            - mysql
         volumes:
             - .:/app
             - /app/node_modules
         restart: unless-stopped
 networks:
     nest_net:
+volumes:
+    db_data:

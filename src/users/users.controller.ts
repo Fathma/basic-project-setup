@@ -1,14 +1,16 @@
-import { Controller, Get, Param } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
+import { CreateUserDto } from './dtos/create-user.dto'
+import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 
-@Controller('users')
-export class UsersController {
-  @Get()
-  getUsers (): string {
-    return 'Users'
-  }
+@ApiTags('auth')
+@Controller('auth')
+export class UserController {
+  @Post('/signup')
+  @ApiOperation({ summary: 'This endpoint is used for creating user/painter.' })
+  @ApiOkResponse({ description: 'Create User/Painter' })
+  createUser (@Body() body: CreateUserDto): string {
+    console.log(body)
 
-  @Get('/:id')
-  getUser (@Param('id') id: string): string {
-    return `User ${id}`
+    return "test"
   }
 }
