@@ -11,6 +11,6 @@ export class UserController {
   createUser (@Body() body: CreateUserDto): string {
     console.log(body)
 
-    return "test"
+    return 'test'
   }
 }
