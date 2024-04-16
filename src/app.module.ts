@@ -3,10 +3,10 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UserModule } from './users/users.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { User } from './users/users.entity'
+import { User } from './users/entities/users.entity'
 import { ConfigModule } from '@nestjs/config'
 import configuration from '../configs/app.config'
-import databaseConfig from '../configs/database.config'
+import databaseConfig, { dataSourceOptions } from '../configs/database.config'
 
 @Module({
   imports: [
@@ -14,12 +14,7 @@ import databaseConfig from '../configs/database.config'
       isGlobal: true,
       load: [configuration]
     }),
-    TypeOrmModule.forRoot({
-      ...databaseConfig(),
-      entities: [
-        User
-      ]
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UserModule
   ],
   controllers: [AppController],
